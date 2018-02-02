@@ -115,6 +115,24 @@ class ServerEvent {
   }
 }
 
+/**
+* An object that represents the platform of a server (eg, docker) 
+*
+*/
+class Server {
+  constructor (name, distro) {
+    this.name = name
+    this.distro = distro
+  }
+  getSetupScript () {
+    return "To be implemented"
+  } 
+  getSetupScriptAsString () {
+    // A default implementation is provided
+    return utils.getScriptAsString(this.getSetupScript())
+  }
+}
+
 module.exports = {
   "Script": Script,
   "Artifact": Artifact,
@@ -123,5 +141,6 @@ module.exports = {
   "Dependency": Dependency,
   "Dependencies": Dependencies,
   "Descriptor": Descriptor,
-  "ServerEvent": ServerEvent
+  "ServerEvent": ServerEvent,
+  "Server": Server
 }

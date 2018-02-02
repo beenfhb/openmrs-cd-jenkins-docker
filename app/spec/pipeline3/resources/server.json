@@ -1,0 +1,24 @@
+{
+  "name":"demo",
+  "description":"Demo server for ODC",
+  "distro":"cambodia",
+  "descriptor": {
+    "url": "https://repo.mekomsolutions.net/cambodia/master/pom.xml",
+    "type": "pom"
+  },
+  "type": "dev",
+  "platform": {
+    "type":"docker",
+    "image":"mekomsolutions/bahmni:cambodia-release-0.90",
+    "ports": {
+      "https":"443:443",
+      "http":"80:80"
+    },
+    "host": {
+      "url":"host.us.mekomsolutions.net",
+      "protocol":"ssh",
+      "user":"centos",
+      "artifacts_directory":"/var/docker-volumes/"
+    }
+  }
+}

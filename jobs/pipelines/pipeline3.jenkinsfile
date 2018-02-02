@@ -1,0 +1,51 @@
+pipeline {
+  agent any
+  tools {
+    maven 'Maven 3.5.0' 
+    nodejs 'NodeJS 8.6.0'
+  }
+  stages {
+    stage ('Install npm dependencies') {
+      steps {
+        sh 'cd /opt/app/; npm install'
+      }
+    }
+    stage ('Pre-run stage') {
+      steps {
+        sh 'node /opt/app/src/$JOB_NAME/build_distro.js /tmp/new_server.json'
+        sh 'cat $WORKSPACE/build_distro.sh'
+        sh '$WORKSPACE/build_distro.sh'
+        sh 'node /opt/app/src/$JOB_NAME/deploy_distro.js /tmp/new_server.json'      
+        sh 'cat $WORKSPACE/deploy_distro.sh'
+        sh '$WORKSPACE/deploy_distro.sh'
+      }
+    }
+    stage ('Setup stage') {
+      steps {
+        sh 'node /opt/app/src/$JOB_NAME/setup.js /tmp/new_server.json'
+        sh '$WORKSPACE/setup.sh'
+      }
+    }
+    stage ('Post-run stage') {
+      steps {
+        sh 'node /opt/app/src/$JOB_NAME/post_run.js /tmp/new_server.json'
+        sh 'node /opt/app/src/$JOB_NAME/ssl.js /tmp/new_server.json'
+      }
+    }
+    stage ('Start stage') {
+      steps {
+        sh 'node /opt/app/src/$JOB_NAME/start.js /tmp/new_server.json'
+      }
+    }
+    stage ('Post-start stage') {
+      steps {
+        sh 'node /opt/app/src/utils/monitor.js /tmp/new_server.json'
+      }
+    }
+    stage ('Fully-started stage') {
+      steps {
+        sh 'echo ""'
+      }
+    }
+  }
+}
